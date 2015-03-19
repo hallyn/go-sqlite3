@@ -248,6 +248,20 @@ func (c *SQLiteConn) Begin() (driver.Tx, error) {
 	return &SQLiteTx{c}, nil
 }
 
+func (c *SQLiteConn) BeginImmediate() (driver.Tx, error) {
+	if _, err := c.exec("BEGIN IMMEDIATE"); err != nil {
+		return nil, err
+	}
+	return &SQLiteTx{c}, nil
+}
+
+func (c *SQLiteConn) BeginExclusive() (driver.Tx, error) {
+	if _, err := c.exec("BEGIN EXCLUSIVE"); err != nil {
+		return nil, err
+	}
+	return &SQLiteTx{c}, nil
+}
+
 func errorString(err Error) string {
 	return C.GoString(C.sqlite3_errstr(C.int(err.Code)))
 }
